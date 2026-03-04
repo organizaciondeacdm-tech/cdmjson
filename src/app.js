@@ -6,13 +6,13 @@ const morgan = require('morgan');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean'); // Cambio: usar xss-clean en lugar de xss
+const xss = require('xss'); // Cambiado: ahora usa xss directamente
 const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/database');
 const errorHandler = require('./middleware/errorHandler');
-const { logger } = require('./middleware/errorHandler'); // Importar logger
+const { logger } = require('./middleware/errorHandler');
 
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
@@ -24,7 +24,6 @@ const reporteRoutes = require('./routes/reporteRoutes');
 const app = express();
 
 // [IMPORTANTE] Conexión a MongoDB - UNA SOLA VEZ al inicio
-// Vercel mantiene la conexión entre invocaciones si está en el scope global
 let isConnected = false;
 
 const connectToDatabase = async () => {
@@ -40,7 +39,6 @@ const connectToDatabase = async () => {
     console.log('✅ Conectado a MongoDB');
   } catch (error) {
     console.error('❌ Error conectando a MongoDB:', error.message);
-    // No hacer throw - permitir que la app funcione sin BD para health checks
   }
 };
 
@@ -61,7 +59,7 @@ const requireDatabase = (req, res, next) => {
 
 // Middleware de seguridad
 app.use(helmet({
-  contentSecurityPolicy: false, // Deshabilitar para Vercel
+  contentSecurityPolicy: false,
 }));
 
 // CORS
@@ -83,9 +81,18 @@ if (!process.env.VERCEL) {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Sanitización
+// Sanitización - Versión corregida usando xss directamente
 app.use(mongoSanitize());
-app.use(xss()); // Usar xss-clean
+app.use((req, res, next) => {
+  if (req.body) {
+    Object.keys(req.body).forEach(key => {
+      if (typeof req.body[key] === 'string') {
+        req.body[key] = xss(req.body[key]);
+      }
+    });
+  }
+  next();
+});
 
 // Compresión
 app.use(compression());
@@ -105,7 +112,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Rutas de API (algunas requieren BD)
+// Rutas de API
 app.use('/api/auth', authRoutes);
 app.use('/api/escuelas', requireDatabase, escuelaRoutes);
 app.use('/api/docentes', requireDatabase, docenteRoutes);
@@ -150,22 +157,3 @@ if (process.env.VERCEL) {
 app.use(errorHandler);
 
 module.exports = app;
-// api/index.js - VERSIÓN CON MÁS LOGS
-console.log('🚀 Iniciando API...');
-console.log('📂 Directorio actual:', __dirname);
-console.log('📂 Archivos en api:', require('fs').readdirSync(__dirname));
-
-let app;
-try {
-  console.log('⏳ Intentando cargar ../src/app...');
-  app = require('../src/app');
-  console.log('✅ app.js cargado correctamente');
-} catch (error) {
-  console.error('❌ Error al cargar app.js:');
-  console.error('   Nombre:', error.name);
-  console.error('   Mensaje:', error.message);
-  console.error('   Stack:', error.stack);
-  app = null;
-}
-
-// ... resto del código igual ...
