@@ -1,21 +1,27 @@
-// api/index.js - Papiweb VERSIÓN CORRECTA PARA VERCEL
-const app = require('../src/app');
-
-// Exportar como función serverless (NO como la app directamente)
+// api/index.js - VERSIÓN DE DIAGNÓSTICO
 module.exports = async (req, res) => {
-  try {
-    // Log para debug (visible en los logs de Vercel)
-    console.log(`🌐 ${req.method} ${req.url}`);
-    
-    // Ejecutar la app de Express
-    await app(req, res);
-  } catch (error) {
-    console.error('💥 Error en función serverless:', error);
-    
-    // Respuesta de error amigable
-    res.status(500).json({ 
-      error: 'Error interno del servidor',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+  console.log(`📡 Diagnóstico - ${req.method} ${req.url}`);
+
+  // Responder a /health
+  if (req.url === '/health') {
+    return res.status(200).json({
+      status: 'OK',
+      message: 'Modo diagnóstico',
+      timestamp: new Date().toISOString()
     });
   }
+
+  // Responder a /api/test
+  if (req.url === '/api/test') {
+    return res.status(200).json({
+      success: true,
+      message: 'API test en modo diagnóstico'
+    });
+  }
+
+  // Cualquier otra ruta
+  return res.status(404).json({
+    error: 'Ruta no encontrada en modo diagnóstico',
+    url: req.url
+  });
 };
