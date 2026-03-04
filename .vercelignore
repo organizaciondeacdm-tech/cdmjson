@@ -1,8 +1,13 @@
-node_modules
-.env.local
-.venv
+# Papiweb desarrollos informaticos
+# Archivos que NO necesitamos en el deploy
 .git
-.gitignore
 README.md
-logs
-backups
+.vscode
+logs/
+node_modules/
+tests/
+*.test.js
+*.spec.js
+.env.local
+.env.development
+.env.test
