@@ -1,0 +1,37 @@
+backend/
+├── src/
+│   ├── config/
+│   │   ├── database.js
+│   │   └── auth.js
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Escuela.js
+│   │   ├── Docente.js
+│   │   └── Alumno.js
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── escuelaController.js
+│   │   ├── docenteController.js
+│   │   ├── alumnoController.js
+│   │   └── reporteController.js
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   ├── validation.js
+│   │   └── errorHandler.js
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── escuelaRoutes.js
+│   │   ├── docenteRoutes.js
+│   │   ├── alumnoRoutes.js
+│   │   └── reporteRoutes.js
+│   ├── services/
+│   │   ├── emailService.js
+│   │   ├── auditoriaService.js
+│   │   └── backupService.js
+│   ├── utils/
+│   │   ├── validators.js
+│   │   └── helpers.js
+│   └── app.js
+├── .env
+├── package.json
+└── server.js
