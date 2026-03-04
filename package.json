@@ -7,11 +7,16 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "dev:frontend": "vite",
-    "build": "npm run build:frontend",
+    "build": "npm run build:backend && npm run build:frontend",
     "build:frontend": "vite build",
+    "build:backend": "echo '✅ Backend preparado para Vercel'",
+    "vercel-build": "npm run build",
     "preview": "vite preview",
     "seed": "node src/config/seed.js",
     "backup": "node src/services/backupService.js"
+  },
+  // ... el resto de dependencias igual ...
+}
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.1.0",
