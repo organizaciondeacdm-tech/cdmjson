@@ -1,7 +1,7 @@
 {
   "name": "acdm-backend",
   "version": "1.0.0",
-  "description": "Backend para Sistema ACDM - Gestión de Asistentes de Clase",
+  "description": "Backend para Sistema ACDM - Papiweb Gestión de Asistentes de Clase",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,14 +9,11 @@
     "dev:frontend": "vite",
     "build": "npm run build:backend && npm run build:frontend",
     "build:frontend": "vite build",
-    "build:backend": "echo '✅ Backend preparado para Vercel'",
+    "build:backend": "echo \"✅ Backend preparado para Vercel\"",
     "vercel-build": "npm run build",
     "preview": "vite preview",
     "seed": "node src/config/seed.js",
     "backup": "node src/services/backupService.js"
-  },
-  // ... el resto de dependencias igual ...
-}
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.1.0",
