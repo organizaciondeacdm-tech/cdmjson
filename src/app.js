@@ -150,3 +150,22 @@ if (process.env.VERCEL) {
 app.use(errorHandler);
 
 module.exports = app;
+// api/index.js - VERSIÓN CON MÁS LOGS
+console.log('🚀 Iniciando API...');
+console.log('📂 Directorio actual:', __dirname);
+console.log('📂 Archivos en api:', require('fs').readdirSync(__dirname));
+
+let app;
+try {
+  console.log('⏳ Intentando cargar ../src/app...');
+  app = require('../src/app');
+  console.log('✅ app.js cargado correctamente');
+} catch (error) {
+  console.error('❌ Error al cargar app.js:');
+  console.error('   Nombre:', error.name);
+  console.error('   Mensaje:', error.message);
+  console.error('   Stack:', error.stack);
+  app = null;
+}
+
+// ... resto del código igual ...
