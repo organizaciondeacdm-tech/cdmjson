@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss'); // Cambiado: ahora usa xss directamente
+const xss = require('xss'); // CAMBIADO: ahora usa xss directamente, no xss-clean
 const path = require('path');
 require('dotenv').config();
 
@@ -81,7 +81,7 @@ if (!process.env.VERCEL) {
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Sanitización - Versión corregida usando xss directamente
+// Sanitización - AHORA USA XSS DIRECTAMENTE
 app.use(mongoSanitize());
 app.use((req, res, next) => {
   if (req.body) {
